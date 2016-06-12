@@ -64,6 +64,7 @@ public class Flood_Gameboard {
 
     protected void check_planes(Color color, int owner) {
 
+
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 if (fields[i][j].owner == owner) {
@@ -110,6 +111,8 @@ public class Flood_Gameboard {
                 }
             }
         } while (found);
+
+
     }
 
 

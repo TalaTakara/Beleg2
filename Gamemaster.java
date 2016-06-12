@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.geom.GeneralPath;
 
 /**
- * Created by saskia on 06.06.16.
+ * Created by saskia on 06.06.16.boolean finish = false;
  */
 public class Gamemaster {
 
@@ -66,7 +66,13 @@ public class Gamemaster {
             player++;
                 if ( player > numPlayers)
                     player = 1;
-}
+        }
+
+        int claimed = F.getScore(player);
+        if (claimed == (size * size)/2){
+            System.out.print("win");
+        }
+
     }
     public void initGame(int size){
 
@@ -87,15 +93,5 @@ public class Gamemaster {
         return size;
     }
 
-    public void setNumColors(int i){
-        this.numColors = i;
-        Flood_Gameboard F = new Flood_Gameboard(size,numColors);
 
-    }
-
-    public void setNumPlayers(int i){
-        this.numPlayers = i;
-        Flood_Gameboard F = new Flood_Gameboard(size,numColors);
-
-    }
 }

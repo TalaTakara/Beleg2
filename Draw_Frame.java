@@ -14,13 +14,21 @@ public class Draw_Frame extends JFrame {
     Gamemaster M ;
     JButton bu1, bu2;
     JSlider slider;
+    final JRadioButton onePButton;
+    final JRadioButton twoPButton;
+    ButtonGroup group;
+
+    private JFrame mainFrame;
+    private JLabel headerLabel;
+    private JLabel statusLabel;
+    private JPanel controlPanel;
 
 
     Draw_Frame(Gamemaster M){
         this.M = M;
 
 
-        JFrame frame = new JFrame();
+        mainFrame = new JFrame();
         setTitle("Flood it");
         setSize(600, 600);
         setLocation(300, 300);
@@ -33,7 +41,6 @@ public class Draw_Frame extends JFrame {
         bu1.setBounds(450, 30, 100, 50);
         bu1.addActionListener( al );
 
-
         add(slider = new JSlider(3, 6, 4));
         slider.setBounds(100, 10, 300,50);
         slider.setPaintTicks(true);    //Striche werden angezeigt
@@ -43,11 +50,47 @@ public class Draw_Frame extends JFrame {
         slider.setValue(4);     //selektiert den Wert 68
         slider.setMajorTickSpacing(1); //Abstände im Großraster
 
+
+        onePButton = new JRadioButton(" 1 Player",true);
+//        birdButton.setSelected(true);
+
+        twoPButton = new JRadioButton("2 Player");
+
+        onePButton.setMnemonic(KeyEvent.VK_C);
+        twoPButton.setMnemonic(KeyEvent.VK_M);
+
+        onePButton.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent e) {
+                statusLabel.setText("Apple RadioButton: "
+                        + (e.getStateChange()==1?"checked":"unchecked"));
+            }
+        });
+
+        group = new ButtonGroup();
+        group.add(onePButton);
+        group.add(twoPButton);
+
+
+
+
+        headerLabel = new JLabel("", JLabel.CENTER);
+        statusLabel = new JLabel("",JLabel.CENTER);
+
+        statusLabel.setSize(350,100);
+
+        controlPanel = new JPanel();
+        controlPanel.setLayout(new FlowLayout());
+
+
         addMouseListener(new mouseclick());
-        frame.pack();
+        mainFrame.pack();
+        mainFrame.add(headerLabel);
+        mainFrame.add(controlPanel);
+        mainFrame.add(statusLabel);
         setVisible(true);
 
     }
+
 
     ActionListener al = new ActionListener() {
         @Override public void actionPerformed( ActionEvent e ) {
@@ -103,76 +146,7 @@ public class Draw_Frame extends JFrame {
 
 }
 
-//     class RadioButton extends JPanel implements ActionListener {
-//    static String birdString = "Bird";
-//    static String catString = "Cat";
-//    JLabel picture;
-//
-//    public RadioButtonDemo() {
-//        super(new BorderLayout());
-//
-//        //Create the radio buttons.
-//        JRadioButton birdButton = new JRadioButton(birdString);
-//        birdButton.setMnemonic(KeyEvent.VK_B);
-//        birdButton.setActionCommand(birdString);
-//        birdButton.setSelected(true);
-//
-//        JRadioButton catButton = new JRadioButton(catString);
-//        catButton.setMnemonic(KeyEvent.VK_C);
-//        catButton.setActionCommand(catString);
-//
-//        ButtonGroup group = new ButtonGroup();
-//        group.add(birdButton);
-//        group.add(catButton);
-//
-//        //Register a listener for the radio buttons.
-//        birdButton.addActionListener(this);
-//        catButton.addActionListener(this);
-//
-//        //Set up the picture label.
-//        picture = new JLabel(createImageIcon("images/"
-//                + birdString
-//                + ".gif"));
-//
-//        //The preferred size is hard-coded to be the width of the
-//        //widest image and the height of the tallest image.
-//        //A real program would compute this.
-//        picture.setPreferredSize(new Dimension(177, 122));
-//
-//
-//        //Put the radio buttons in a column in a panel.
-//        JPanel radioPanel = new JPanel(new GridLayout(0, 1));
-//        radioPanel.add(birdButton);
-//        radioPanel.add(catButton);
-//
-//        add(radioPanel, BorderLayout.LINE_START);
-//        add(picture, BorderLayout.CENTER);
-//        setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-//    }
-//
-//
-//    /**
-//     * Listens to the radio buttons.
-//     */
-//    public void actionPerformed(ActionEvent e) {
-//        picture.setIcon(createImageIcon("images/"
-//                + e.getActionCommand()
-//                + ".gif"));
-//    }
-//
-//    /**
-//     * Returns an ImageIcon, or null if the path was invalid.
-//     */
-//    protected static ImageIcon createImageIcon(String path) {
-//        java.net.URL imgURL = RadioButtonDemo.class.getResource(path);
-//        if (imgURL != null) {
-//            return new ImageIcon(imgURL);
-//        } else {
-//            System.err.println("Couldn't find file: " + path);
-//            return null;
-//        }
-//    }
-//}
+
 
 // // TODO: 06.06.16 Frame adden um slider gängig zu machen
 //// TODO: 07.06.16 Spielerfeldzahl und gewinnbedingungen anzeigen ... Züge anzeigen (nur noch anzeigen)
