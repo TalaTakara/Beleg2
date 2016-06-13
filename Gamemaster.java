@@ -17,7 +17,6 @@ public class Gamemaster {
     Color[] playerColor = new Color[numPlayers];
 
     Flood_Gameboard F;
-    Draw_Frame D;
 
     Player P1,P2;
     Player[] Players;
@@ -32,9 +31,9 @@ public class Gamemaster {
 
 
     public void newGame() {
-        Player P1 = new Player(1,size);
-        Player P2 = new Player(2,size);
-        Player[] Players = new Player[numPlayers];
+        Player P1 = new Player(1,size,true);
+        Player P2 = new Player(2,size,false);
+        Players = new Player[numPlayers];
         Players[0] = P1;
         if ( numPlayers > 1 ) { Players[1] = P2;}
 
@@ -52,26 +51,57 @@ public class Gamemaster {
         if (numPlayers > 1 ){F.check_planes(P2.color,P2.number);}
     }
 
-    public void  turn(int i, int j){
+    public void  turn(int i, int j) {
+//        F.zug(i, j, player);
+//        F.zug(i, j, player);
+//        numTurns++;
+//        playerColor[player - 1] = targetColor;
+//        player++;
+//        if (player > numPlayers)
+//
+//            numTurns++;
+//        playerColor[player - 1] = targetColor;
+//        player++;
+//        if (player > numPlayers)
 
-        Color targetColor = F.getField(i,j).color;
+            Color targetColor = F.getField(i, j).color;
+        int claimed;
 
         /* You must not choose your color or from your opponent*/
-        if ( targetColor != F.getField(0, 0).color && targetColor != F.getField(size-1,size-1).color){
+        if (targetColor != F.getField(0, 0).color && targetColor != F.getField(size - 1, size - 1).color) {
 
-                F.zug(i,j,player);
-                numTurns++;
-//                Players[player-1].color = targetColor;
-            playerColor[player-1] = targetColor;
-            player++;
-                if ( player > numPlayers)
-                    player = 1;
-        }
+            if (Players[0].getTurn()) {
+                F.zug(i, j, Players[0].number);
+                if (Players.length > 1) {
+                    Players[1].getTurn();
+                    claimed = F.getScore(Players[0].number);
+                    if (claimed == (size * size) / 2) {
+                        System.out.print("win player 1");
+                    }
+                }
+            }
+                    } else if ( Players[1].getTurn()) {
+                        F.zug(i, j, Players[1].number);
+                        claimed = F.getScore(Players[1].number);
+                        if (claimed == (size * size) / 2) {
+                            System.out.print("win player 2");
 
-        int claimed = F.getScore(player);
-        if (claimed == (size * size)/2){
-            System.out.print("win");
-        }
+                        }
+
+
+//            F.zug(i,j,player);
+//            numTurns++;
+//            playerColor[player-1] = targetColor;
+//            player++;
+//                if ( player > numPlayers)
+//                    player = 1;
+                    }
+
+//            int claimed = F.getScore(player);
+//            if (claimed == (size * size) / 2) {
+//                System.out.print("win");
+
+
 
     }
     public void initGame(int size){
