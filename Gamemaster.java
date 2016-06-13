@@ -129,7 +129,8 @@ public class Gamemaster {
         if (win == null){
         String turns = "Züge : " +  Integer.toString(numTurns);
         return turns;}
-        return win;
+        String wins = win + " in " + numTurns + " Züge.";
+        return wins ;
     }
 
     public String getClaimedP2(){

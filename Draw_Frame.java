@@ -14,15 +14,10 @@ public class Draw_Frame extends JFrame {
     Gamemaster M ;
     JButton bu1, bu2;
     JSlider slider_color, slider_size, slider_player;
-    final JRadioButton onePButton;
-    final JRadioButton twoPButton;
-    ButtonGroup group;
     int fieldsize = 30;
 
     private JFrame mainFrame;
     private JLabel highscore, PunkteP1, PunkteP2, turns_win, num_Colors, num_Players, labelSize, labelTurns;
-    private JLabel statusLabel;
-    private JPanel controlPanel;
 
 
     Draw_Frame(Gamemaster M){
@@ -44,7 +39,7 @@ public class Draw_Frame extends JFrame {
         add(PunkteP2);
 
         turns_win = new JLabel(M.getnumTurns());
-        turns_win.setBounds(200,75,200,50);
+        turns_win.setBounds(100,75,400,50);
         add(turns_win);
 
 
@@ -60,7 +55,7 @@ public class Draw_Frame extends JFrame {
         slider_size = new JSlider(SwingConstants.VERTICAL, 5, 30, 10 );
         slider_size.setBounds(0, 50, 50,500);
         slider_size.setPaintTicks(true);    //Striche werden angezeigt
-        slider_size.setPaintLabels(true);  //Zahlen werden nicht angezeigt
+        slider_size.setPaintLabels(true);  //Zahlen werden angezeigt
         slider_size.setMajorTickSpacing(5); //Abstände im Großraster
         slider_size.setSnapToTicks(true);
         add(slider_size);
@@ -72,7 +67,7 @@ public class Draw_Frame extends JFrame {
         slider_player = new JSlider( 1, 2, 1 );
         slider_player.setBounds(450, 20, 100 ,50);
         slider_player.setPaintTicks(true);    //Striche werden angezeigt
-        slider_player.setPaintLabels(true);  //Zahlen werden nicht angezeigt
+        slider_player.setPaintLabels(true);  //Zahlen werden angezeigt
         slider_player.setMajorTickSpacing(1); //Abstände im Großraster
         add(slider_player);
 
@@ -84,29 +79,9 @@ public class Draw_Frame extends JFrame {
         slider_color = new JSlider(3, 6, 4);
         slider_color.setBounds(100, 20, 300,50);
         slider_color.setPaintTicks(true);    //Striche werden angezeigt
-        slider_color.setPaintLabels(true);  //Zahlen werden nicht angezeigt
+        slider_color.setPaintLabels(true);  //Zahlen werden angezeigt
         slider_color.setMajorTickSpacing(1); //Abstände im Großraster
         add(slider_color);
-
-        onePButton = new JRadioButton(" 1 Player",true);
-//        birdButton.setSelected(true);
-
-        twoPButton = new JRadioButton("2 Player");
-
-        onePButton.setMnemonic(KeyEvent.VK_C);
-        twoPButton.setMnemonic(KeyEvent.VK_M);
-
-        onePButton.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent e) {
-                statusLabel.setText("Apple RadioButton: "
-                        + (e.getStateChange()==1?"checked":"unchecked"));
-            }
-        });
-
-        group = new ButtonGroup();
-        group.add(onePButton);
-        group.add(twoPButton);
-
 
         addMouseListener(new mouseclick());
         mainFrame.pack();
