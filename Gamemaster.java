@@ -52,17 +52,7 @@ public class Gamemaster {
     }
 
     public void  turn(int i, int j) {
-//        F.zug(i, j, player);
-//        F.zug(i, j, player);
-//        numTurns++;
-//        playerColor[player - 1] = targetColor;
-//        player++;
-//        if (player > numPlayers)
-//
-//            numTurns++;
-//        playerColor[player - 1] = targetColor;
-//        player++;
-//        if (player > numPlayers)
+
 
             Color targetColor = F.getField(i, j).color;
         int claimed;
@@ -70,39 +60,26 @@ public class Gamemaster {
         /* You must not choose your color or from your opponent*/
         if (targetColor != F.getField(0, 0).color && targetColor != F.getField(size - 1, size - 1).color) {
 
-            if (Players[0].getTurn()) {
+            if (player == 1) {
                 F.zug(i, j, Players[0].number);
                 if (Players.length > 1) {
-                    Players[1].getTurn();
+                    player = 2;
                     claimed = F.getScore(Players[0].number);
                     if (claimed == (size * size) / 2) {
                         System.out.print("win player 1");
                     }
                 }
+
+            } else if (player == 2) {
+                F.zug(i, j, Players[1].number);
+                player = 1;
+                claimed = F.getScore(Players[1].number);
+                if (claimed == (size * size) / 2) {
+                    System.out.print("win player 2");
+
+                }
             }
-                    } else if ( Players[1].getTurn()) {
-                        F.zug(i, j, Players[1].number);
-                        claimed = F.getScore(Players[1].number);
-                        if (claimed == (size * size) / 2) {
-                            System.out.print("win player 2");
-
-                        }
-
-
-//            F.zug(i,j,player);
-//            numTurns++;
-//            playerColor[player-1] = targetColor;
-//            player++;
-//                if ( player > numPlayers)
-//                    player = 1;
-                    }
-
-//            int claimed = F.getScore(player);
-//            if (claimed == (size * size) / 2) {
-//                System.out.print("win");
-
-
-
+        }
     }
     public void initGame(int size){
 

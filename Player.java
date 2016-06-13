@@ -11,7 +11,6 @@ public class Player {
     int highscore;
     int score;
     int size;
-    boolean turn;
     Color color;
 
 
@@ -20,7 +19,6 @@ public class Player {
     public Player(int number,int size, boolean turn){
         this.number = number;
         this.size = size;
-        this.turn = turn;
         highscore = 0;
         score = 0;
 
@@ -35,16 +33,7 @@ public class Player {
         }
     }
 
-    public boolean getTurn(){
-        if (turn  == true){
-            turn = false;
-            return true;
-        }
-        else {
-            turn = true;
-            return false;
-        }
-    }
+
 
 
 }
