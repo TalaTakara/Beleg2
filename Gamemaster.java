@@ -65,7 +65,7 @@ public class Gamemaster {
                 if (Players.length > 1) {
                     player = 2;
                     claimed = F.getScore(Players[0].number);
-                    if (claimed == (size * size) / 2) {
+                    if (claimed > (size * size) / 2) {
                         System.out.print("win player 1");
                     }
                 }
@@ -74,7 +74,7 @@ public class Gamemaster {
                 F.zug(i, j, Players[1].number);
                 player = 1;
                 claimed = F.getScore(Players[1].number);
-                if (claimed == (size * size) / 2) {
+                if (claimed > (size * size) / 2) {
                     System.out.print("win player 2");
 
                 }
