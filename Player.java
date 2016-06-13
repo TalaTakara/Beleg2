@@ -16,7 +16,7 @@ public class Player {
 
 
 
-    public Player(int number,int size, boolean turn){
+    public Player(int number,int size){
         this.number = number;
         this.size = size;
         highscore = 0;
