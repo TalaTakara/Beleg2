@@ -17,7 +17,7 @@ public class Draw_Frame extends JFrame {
     int fieldsize = 30;
 
     private JFrame mainFrame;
-    private JLabel highscore, PunkteP1, PunkteP2, turns_win, num_Colors, num_Players, labelSize, labelTurns;
+    private JLabel highscore, PunkteP1, PunkteP2, turns_win, num_Colors, num_Players, labelSize;
 
 
     Draw_Frame(Gamemaster M){
