@@ -7,7 +7,7 @@ import java.awt.*;
  */
 public class Flood_Gameboard {
 
-    private int size, num_color, width, height;
+    public int size, num_color, width, height;
     Field[][] fields;
     Gamemaster M;
 
@@ -19,7 +19,7 @@ public class Flood_Gameboard {
         this.num_color = num_color;
         width = 50;
         height = 50;
-        draw_new_Game();
+
     }
 
     /* If I want to choose the size in a game*/
@@ -44,19 +44,23 @@ public class Flood_Gameboard {
     }
 
 
-    private void draw_new_Game() {
+    public void draw_new_Game(int size, int num_color) {
+
+        this.size = size;
+        this.num_color = num_color;
 
         fields = new Field[size][size];
 
+
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                fields[i][j] = new Field();
+                fields[i][j] = new Field(num_color);
             }
         }
 
         //Verhindere, dass beide startpositionen dieselbe farbe haben
         while (fields[0][0].color == fields[size-1][size-1].color) {
-            fields[0][0] = new Field();
+            fields[0][0] = new Field(num_color);
         }
 
     }

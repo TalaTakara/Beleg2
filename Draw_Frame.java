@@ -13,13 +13,14 @@ public class Draw_Frame extends JFrame {
     Flood_Gameboard F;
     Gamemaster M ;
     JButton bu1, bu2;
-    JSlider slider;
+    JSlider slider_color, slider_size, slider_player;
     final JRadioButton onePButton;
     final JRadioButton twoPButton;
     ButtonGroup group;
+    int fieldsize = 30;
 
     private JFrame mainFrame;
-    private JLabel highscore, PunkteP1, PunkteP2, win;
+    private JLabel highscore, PunkteP1, PunkteP2, turns_win, num_Colors, num_Players, labelSize, labelTurns;
     private JLabel statusLabel;
     private JPanel controlPanel;
 
@@ -30,36 +31,62 @@ public class Draw_Frame extends JFrame {
         mainFrame = new JFrame();
         setTitle("Flood it");
         setSize(600, 600);
-        setLocation(300, 300);
+        setLocation(100, 100);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
 
         PunkteP1 = new JLabel(  M.getClaimedP1());
-       PunkteP1.setBounds(100,450,150,50);
+        PunkteP1.setBounds(100,100,150,50);
         add(PunkteP1);
 
-
         PunkteP2 = new JLabel(   M.getClaimedP2());
-        PunkteP2.setBounds(300,450,150,50);
+        PunkteP2.setBounds(300,100,150,50);
         add(PunkteP2);
 
-        win = new JLabel(M.getWin());
-        win.setBounds(200,410,200,50);
-        add(win);
+        turns_win = new JLabel(M.getnumTurns());
+        turns_win.setBounds(200,75,200,50);
+        add(turns_win);
+
 
         add(bu1 = new JButton("new Game"));
-        bu1.setBounds(450, 30, 100, 50);
+        bu1.setBounds(450, 80, 100, 50);
         bu1.addActionListener(al_newGame);
 
-        add(slider = new JSlider(3, 6, 4));
-        slider.setBounds(100, 10, 300,50);
-        slider.setPaintTicks(true);    //Striche werden angezeigt
-        slider.setPaintLabels(true);  //Zahlen werden nicht angezeigt
-        slider.setMinimum(2);    //stellt den Minimalwert auf 0 ein
-        slider.setMaximum(6);  //stellt den Maximalwert auf 150 ein
-        slider.setValue(4);     //selektiert den Wert 68
-        slider.setMajorTickSpacing(1); //Abstände im Großraster
 
+        labelSize = new JLabel( "Felder");
+        labelSize.setBounds(10,0,50,50);
+        add(labelSize);
+
+        slider_size = new JSlider(SwingConstants.VERTICAL, 5, 30, 10 );
+        slider_size.setBounds(0, 50, 50,500);
+        slider_size.setPaintTicks(true);    //Striche werden angezeigt
+        slider_size.setPaintLabels(true);  //Zahlen werden nicht angezeigt
+        slider_size.setMajorTickSpacing(5); //Abstände im Großraster
+        slider_size.setSnapToTicks(true);
+        add(slider_size);
+
+        num_Players = new JLabel( "Spieleranzahl");
+        num_Players.setBounds(450,0,150,30);
+        add(num_Players);
+
+        slider_player = new JSlider( 1, 2, 1 );
+        slider_player.setBounds(450, 20, 100 ,50);
+        slider_player.setPaintTicks(true);    //Striche werden angezeigt
+        slider_player.setPaintLabels(true);  //Zahlen werden nicht angezeigt
+        slider_player.setMajorTickSpacing(1); //Abstände im Großraster
+        add(slider_player);
+
+
+        num_Colors = new JLabel( "Anzahl der Farben");
+        num_Colors.setBounds(200,0,150,30);
+        add(num_Colors);
+
+        slider_color = new JSlider(3, 6, 4);
+        slider_color.setBounds(100, 20, 300,50);
+        slider_color.setPaintTicks(true);    //Striche werden angezeigt
+        slider_color.setPaintLabels(true);  //Zahlen werden nicht angezeigt
+        slider_color.setMajorTickSpacing(1); //Abstände im Großraster
+        add(slider_color);
 
         onePButton = new JRadioButton(" 1 Player",true);
 //        birdButton.setSelected(true);
@@ -81,23 +108,8 @@ public class Draw_Frame extends JFrame {
         group.add(twoPButton);
 
 
-
-
-//        headerLabel = new JLabel("", JLabel.CENTER);
-        statusLabel = new JLabel("",JLabel.CENTER);
-
-        statusLabel.setSize(350,100);
-
-        controlPanel = new JPanel();
-        controlPanel.setLayout(new FlowLayout());
-
-
         addMouseListener(new mouseclick());
         mainFrame.pack();
-//        mainFrame.add(headerLabel);
-        mainFrame.add(controlPanel);
-        mainFrame.add(statusLabel);
-
         setVisible(true);
 
     }
@@ -105,11 +117,20 @@ public class Draw_Frame extends JFrame {
 
     ActionListener al_newGame = new ActionListener() {
         @Override public void actionPerformed( ActionEvent e ) {
-           int size = slider.getValue();
-                M.initGame(size);
+           int numColors = slider_color.getValue();
+            int numPlayer = slider_player.getValue();
+            int size = slider_size.getValue();
+            if (size > 14){
+                setSize(750,750);
+            }
+            if (size > 19){
+                fieldsize = 15;
+            }
+                M.initGame(size, numColors, numPlayer);
             repaint();
         }
     };
+
 
 
     public void paint(Graphics g) {
@@ -117,7 +138,7 @@ public class Draw_Frame extends JFrame {
 
         PunkteP1.setText( M.getClaimedP1());
         PunkteP2.setText( M.getClaimedP2());
-        win.setText(M.getWin());
+        turns_win.setText(M.getnumTurns());
 
 
         for (int i = 0; i < M.getsize(); i++) {
@@ -126,14 +147,14 @@ public class Draw_Frame extends JFrame {
                Color c =f.color;
 
                 g.setColor(c);
-                g.fillRect(100 + i * 30, 100 + j * 30, 30, 30);
+                g.fillRect(100 + i * fieldsize, 150 + j * fieldsize, fieldsize, fieldsize);
                 g.setColor(Color.black);
-                g.drawRect(100 + i * 30, 100 + j * 30, 30, 30);
+                g.drawRect(100 + i * fieldsize, 150 + j * fieldsize, fieldsize, fieldsize);
 
                 /* Debugger for Ownership */
                 if ( f.owner != 0){
                    g.setFont(new Font("Sans", Font.BOLD, 20));
-                      g.drawString( "" + f.owner ,110+ i * 30, 125 + j * 30);
+                      g.drawString( "" + f.owner ,110+ i * 30, 175 + j * 30);
                 }
             }
         }
@@ -149,8 +170,8 @@ public class Draw_Frame extends JFrame {
             x = e.getX();
             y = e.getY();
 
-            i = ((x -100)/30);
-            j = ((y -100)/30);
+            i = ((x -100)/fieldsize);
+            j = ((y -150)/fieldsize);
 
             if (i >= 0 && i < M.getsize() && j >=  0 && j < M.getsize()) {
                 M.turn(i, j);

@@ -12,10 +12,9 @@ public class Gamemaster {
     int numColors = 4;
     int size = 10;
     int numTurns = 0;
-    int numPlayers = 2;
-    int numFields;
+    int numPlayers = 1;
     int claimedP1, claimedP2;
-    String win = "";
+    String win = null;
     Color[] playerColor = new Color[numPlayers];
 
     Flood_Gameboard F;
@@ -32,6 +31,8 @@ public class Gamemaster {
 
 
     public void newGame() {
+
+        F.draw_new_Game(size, numColors);
         Player P1 = new Player(1, size);
         Player P2 = new Player(2, size);
         Players = new Player[numPlayers];
@@ -66,6 +67,7 @@ public class Gamemaster {
                     player = 2;
                     if (targetColor != Players[1].color) {
                         F.zug(i, j, Players[0].number);
+                        numTurns++;
                         claimedP1 = F.getScore(Players[0].number);
                         if (claimedP1 > (size * size) / 2) {
                             win = "Spieler 1 hat gewonnen";
@@ -73,6 +75,7 @@ public class Gamemaster {
                     }
                 } else {
                     F.zug(i, j, Players[0].number);
+                    numTurns++;
                     claimedP1 = F.getScore(Players[0].number);
                     if (claimedP1 == (size * size)) {
                         win = "Spieler 1 hat gewonnen";
@@ -81,6 +84,7 @@ public class Gamemaster {
 
             } else if (player == 2 && targetColor != Players[1].color) {
                 F.zug(i, j, Players[1].number);
+                numTurns++;
                 player = 1;
                 claimedP2 = F.getScore(Players[1].number);
                 if (claimedP2 > (size * size) / 2) {
@@ -91,9 +95,15 @@ public class Gamemaster {
         }
     }
 
-    public void initGame(int size) {
+    public void initGame(int size, int numColors, int numPlayers) {
+        this.size = size;
+        this.numColors = numColors;
+        this.numPlayers = numPlayers;
+        numTurns = 0;
+        claimedP1 = 0;
+        claimedP2 = 0;
 
-        Flood_Gameboard F = new Flood_Gameboard(size, numColors);
+        newGame();
 
 
     }
@@ -115,6 +125,13 @@ public class Gamemaster {
         return claim;
     }
 
+    public String getnumTurns(){
+        if (win == null){
+        String turns = "Züge : " +  Integer.toString(numTurns);
+        return turns;}
+        return win;
+    }
+
     public String getClaimedP2(){
         String claim = "";
         if (numPlayers > 1 ) {
@@ -123,8 +140,6 @@ public class Gamemaster {
         return claim;
     }
 
-    public String getWin(){
-        return win;
-    }
+
 
 }

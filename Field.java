@@ -9,9 +9,12 @@ public class Field {
 
     public Color color;
     public int owner;
+    public int numColor;
 
-    public Field(){
-        color = palette[ (int) (Math.random() * palette.length)];
+    public Field(int numColor){
+
+        this.numColor = numColor;
+        color = palette[ (int) (Math.random() * numColor)];
         owner = 0;
     }
 
