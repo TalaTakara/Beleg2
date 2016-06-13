@@ -30,11 +30,11 @@ public class Draw_Frame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
 
-        PunkteP1 = new JLabel(  M.getClaimedP1());
+        PunkteP1 = new JLabel( M.getClaimedP1());
         PunkteP1.setBounds(100,100,150,50);
         add(PunkteP1);
 
-        PunkteP2 = new JLabel(   M.getClaimedP2());
+        PunkteP2 = new JLabel( M.getClaimedP2());
         PunkteP2.setBounds(300,100,150,50);
         add(PunkteP2);
 
@@ -111,11 +111,6 @@ public class Draw_Frame extends JFrame {
     public void paint(Graphics g) {
         super.paintComponents(g);
 
-        PunkteP1.setText( M.getClaimedP1());
-        PunkteP2.setText( M.getClaimedP2());
-        turns_win.setText(M.getnumTurns());
-
-
         for (int i = 0; i < M.getsize(); i++) {
             for (int j = 0; j < M.getsize(); j++) {
                 Field f = M.getField(i,j);
@@ -154,6 +149,10 @@ public class Draw_Frame extends JFrame {
 //            System.out.print("sn" + i);
 //            System.out.println("zn" + j);
 
+                PunkteP1.setText( M.getClaimedP1());
+                PunkteP2.setText( M.getClaimedP2());
+                turns_win.setText(M.getnumTurns());
+
                 repaint();
             }
         }
@@ -163,5 +162,4 @@ public class Draw_Frame extends JFrame {
 
 
 
-// // TODO: 06.06.16 Frame adden um slider gängig zu machen
-//// TODO: 07.06.16 Spielerfeldzahl und gewinnbedingungen anzeigen ... Züge anzeigen (nur noch anzeigen)
+// // TODO: 06.06.16 Frame adden
