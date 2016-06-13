@@ -19,14 +19,13 @@ public class Draw_Frame extends JFrame {
     ButtonGroup group;
 
     private JFrame mainFrame;
-    private JLabel headerLabel;
+    private JLabel highscore, PunkteP1, PunkteP2, win;
     private JLabel statusLabel;
     private JPanel controlPanel;
 
 
     Draw_Frame(Gamemaster M){
         this.M = M;
-
 
         mainFrame = new JFrame();
         setTitle("Flood it");
@@ -35,11 +34,22 @@ public class Draw_Frame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
 
+        PunkteP1 = new JLabel(  M.getClaimedP1());
+       PunkteP1.setBounds(100,450,150,50);
+        add(PunkteP1);
 
+
+        PunkteP2 = new JLabel(   M.getClaimedP2());
+        PunkteP2.setBounds(300,450,150,50);
+        add(PunkteP2);
+
+        win = new JLabel(M.getWin());
+        win.setBounds(200,410,200,50);
+        add(win);
 
         add(bu1 = new JButton("new Game"));
         bu1.setBounds(450, 30, 100, 50);
-        bu1.addActionListener( al );
+        bu1.addActionListener(al_newGame);
 
         add(slider = new JSlider(3, 6, 4));
         slider.setBounds(100, 10, 300,50);
@@ -73,7 +83,7 @@ public class Draw_Frame extends JFrame {
 
 
 
-        headerLabel = new JLabel("", JLabel.CENTER);
+//        headerLabel = new JLabel("", JLabel.CENTER);
         statusLabel = new JLabel("",JLabel.CENTER);
 
         statusLabel.setSize(350,100);
@@ -84,15 +94,16 @@ public class Draw_Frame extends JFrame {
 
         addMouseListener(new mouseclick());
         mainFrame.pack();
-        mainFrame.add(headerLabel);
+//        mainFrame.add(headerLabel);
         mainFrame.add(controlPanel);
         mainFrame.add(statusLabel);
+
         setVisible(true);
 
     }
 
 
-    ActionListener al = new ActionListener() {
+    ActionListener al_newGame = new ActionListener() {
         @Override public void actionPerformed( ActionEvent e ) {
            int size = slider.getValue();
                 M.initGame(size);
@@ -103,6 +114,12 @@ public class Draw_Frame extends JFrame {
 
     public void paint(Graphics g) {
         super.paintComponents(g);
+
+        PunkteP1.setText( M.getClaimedP1());
+        PunkteP2.setText( M.getClaimedP2());
+        win.setText(M.getWin());
+
+
         for (int i = 0; i < M.getsize(); i++) {
             for (int j = 0; j < M.getsize(); j++) {
                 Field f = M.getField(i,j);
@@ -135,12 +152,14 @@ public class Draw_Frame extends JFrame {
             i = ((x -100)/30);
             j = ((y -100)/30);
 
-            M.turn(i,j);
+            if (i >= 0 && i < M.getsize() && j >=  0 && j < M.getsize()) {
+                M.turn(i, j);
             /* Debug which Field is clicked */
 //            System.out.print("sn" + i);
 //            System.out.println("zn" + j);
 
-            repaint();
+                repaint();
+            }
         }
     }
 
