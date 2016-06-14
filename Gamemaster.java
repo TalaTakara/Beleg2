@@ -1,7 +1,6 @@
 package Gameboard;
 
 import java.awt.*;
-import java.awt.geom.GeneralPath;
 
 /**
  * Created by saskia on 06.06.16.boolean finish = false;
@@ -17,13 +16,13 @@ public class Gamemaster {
     String win = null;
     Color[] playerColor = new Color[numPlayers];
 
-    Flood_Gameboard F;
+    FloodGameboard F;
 
     Player P1, P2;
     Player[] Players;
 
 
-    public Gamemaster(Flood_Gameboard F) {
+    public Gamemaster(FloodGameboard F) {
         this.F = F;
         player = 1;
         newGame();
@@ -32,7 +31,7 @@ public class Gamemaster {
 
     public void newGame() {
 
-        F.draw_new_Game(size, numColors);
+        F.drawNewGame(size, numColors);
         Player P1 = new Player(1, size);
         Player P2 = new Player(2, size);
         Players = new Player[numPlayers];
@@ -45,8 +44,10 @@ public class Gamemaster {
         for (int i = 0; i < numPlayers; i++) {
                 /* takes field with startposition from player*/
             Field f = F.getField(Players[i].getStartPosition(), Players[i].getStartPosition());
+            Players[i].color = f.color ;
                 /* makes fieldowner*/
             f.owner = Players[i].number;
+
                 /*  test if more fields around*/
             F.zug(Players[i].getStartPosition(), Players[i].getStartPosition(), Players[i].number);
         }
@@ -54,7 +55,7 @@ public class Gamemaster {
 
     public void turn(int i, int j) {
 
-
+        System.out.print(player);
         Color targetColor = F.getField(i, j).color;
 
 
@@ -64,26 +65,28 @@ public class Gamemaster {
 
             if (player == 1) {
                 if (Players.length > 1) {
-                    player = 2;
                     if (targetColor != Players[1].color) {
                         F.zug(i, j, Players[0].number);
+                        player = 2;
                         numTurns++;
                         claimedP1 = F.getScore(Players[0].number);
                         if (claimedP1 > (size * size) / 2) {
                             win = "Spieler 1 hat gewonnen";
                         }
                     }
-                } else {
+                } else if (Players.length == 1 ){
                     F.zug(i, j, Players[0].number);
+                    Players[0].color = targetColor;
                     numTurns++;
                     claimedP1 = F.getScore(Players[0].number);
                     if (claimedP1 == (size * size)) {
                         win = "Spieler 1 hat gewonnen";
-                    }
+                }
                 }
 
             } else if (player == 2 && targetColor != Players[1].color) {
                 F.zug(i, j, Players[1].number);
+                Players[1].color = targetColor;
                 numTurns++;
                 player = 1;
                 claimedP2 = F.getScore(Players[1].number);
@@ -116,31 +119,31 @@ public class Gamemaster {
         this.size = i;
     }
 
-    public int getsize() {
+    public int getSize() {
         return size;
     }
 
-    public String getClaimedP1(){
+    public String getClaimedP1() {
         String claim = "Spieler 1 : " + Integer.toString(claimedP1);
         return claim;
     }
 
-    public String getnumTurns(){
-        if (win == null){
-        String turns = "Züge : " +  Integer.toString(numTurns);
-        return turns;}
+    public String getNumTurns() {
+        if (win == null) {
+            String turns = "Züge : " + Integer.toString(numTurns);
+            return turns;
+        }
         String wins = win + " in " + numTurns + " Züge.";
-        return wins ;
+        return wins;
     }
 
-    public String getClaimedP2(){
+    public String getClaimedP2() {
         String claim = "";
-        if (numPlayers > 1 ) {
+        if (numPlayers > 1) {
             claim = "Spieler 2 : " + Integer.toString(claimedP2);
         }
         return claim;
     }
-
 
 
 }

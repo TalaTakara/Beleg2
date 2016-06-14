@@ -14,7 +14,7 @@ public class Field {
     public Field(int numColor){
 
         this.numColor = numColor;
-        color = palette[ (int) (Math.random() * numColor)];
+        color = PALETTE[ (int) (Math.random() * numColor)];
         owner = 0;
     }
 
@@ -27,6 +27,6 @@ public class Field {
     public static final Color RED = new Color(255, 69, 0);
 
 
-    public static final Color[] palette = {MAGENTA, PURPLE, BLUE, GREEN, YELLOW, RED};
+    public static final Color[] PALETTE = {MAGENTA, PURPLE, BLUE, GREEN, YELLOW, RED};
 
 }
