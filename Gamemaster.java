@@ -12,11 +12,11 @@ public class Gamemaster {
     int size = 10;
     int numTurns = 0;
     int numPlayers = 1;
-    int claimedP1, claimedP2;
+    int claimedP1, claimedP2,highscore;
     String win = null;
     Color[] playerColor = new Color[numPlayers];
 
-    FloodGameboard F;
+    FloodGameboard F,FOld;
 
     Player P1, P2;
     Player[] Players;
@@ -26,11 +26,13 @@ public class Gamemaster {
         this.F = F;
         player = 1;
         newGame();
+
     }
 
 
     public void newGame() {
 
+        FOld = new FloodGameboard(size, numColors);
         F.drawNewGame(size, numColors);
         Player P1 = new Player(1, size);
         Player P2 = new Player(2, size);
@@ -72,7 +74,9 @@ public class Gamemaster {
                         claimedP1 = F.getScore(Players[0].number);
                         if (claimedP1 > (size * size) / 2) {
                             win = "Spieler 1 hat gewonnen";
+
                         }
+
                     }
                 } else if (Players.length == 1 ){
                     F.zug(i, j, Players[0].number);
@@ -81,6 +85,7 @@ public class Gamemaster {
                     claimedP1 = F.getScore(Players[0].number);
                     if (claimedP1 == (size * size)) {
                         win = "Spieler 1 hat gewonnen";
+
                 }
                 }
 
@@ -102,13 +107,17 @@ public class Gamemaster {
         this.size = size;
         this.numColors = numColors;
         this.numPlayers = numPlayers;
+        win = null;
+        player = 1;
         numTurns = 0;
         claimedP1 = 0;
         claimedP2 = 0;
 
         newGame();
+    }
 
-
+    public void undo(){
+        F.undo();
     }
 
     public Field getField(int i, int j) {
@@ -129,11 +138,13 @@ public class Gamemaster {
     }
 
     public String getNumTurns() {
-        if (win == null) {
-            String turns = "Züge : " + Integer.toString(numTurns);
-            return turns;
+        String wins;
+        if (win != null) {
+            wins = win + " in " + numTurns + " Züge.";
         }
-        String wins = win + " in " + numTurns + " Züge.";
+        else{
+        String turns = "Züge : " + Integer.toString(numTurns);
+        return turns;}
         return wins;
     }
 
@@ -143,6 +154,11 @@ public class Gamemaster {
             claim = "Spieler 2 : " + Integer.toString(claimedP2);
         }
         return claim;
+    }
+
+    public String getHighscore(){
+        String highscoreString = "";
+        return highscoreString;
     }
 
 

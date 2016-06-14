@@ -27,6 +27,6 @@ public class Field {
     public static final Color RED = new Color(255, 69, 0);
 
 
-    public static final Color[] PALETTE = {MAGENTA, PURPLE, BLUE, GREEN, YELLOW, RED};
+    public static final Color[] PALETTE = {MAGENTA, BLUE, GREEN,YELLOW, PURPLE, RED};
 
 }

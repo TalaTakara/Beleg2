@@ -8,7 +8,7 @@ import java.awt.*;
 public class FloodGameboard {
 
     public int size, numColor, width, height;
-    Field[][] fields;
+    Field[][] fields,fieldsOld;
     Gamemaster M;
 
 
@@ -24,7 +24,20 @@ public class FloodGameboard {
     public Field getField(int i, int j) {
         return fields[i][j];
     }
+    public Field getFieldOld(int i, int j) {
+        return fieldsOld[i][j];
+    }
 
+
+    public void undo(){
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                fields[i][j] = getFieldOld(i,j);
+            }
+        }
+
+
+    }
 
     public void zug(int i, int j, int owner) {
         Field f = fields[i][j];
@@ -38,11 +51,13 @@ public class FloodGameboard {
         this.numColor = numColor;
 
         fields = new Field[size][size];
+        fieldsOld = new Field[size][size];
 
 
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 fields[i][j] = new Field(numColor);
+                fieldsOld[i][j] = fields[i][j];
             }
         }
 
@@ -59,6 +74,7 @@ public class FloodGameboard {
 
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
+                fieldsOld[i][j] = getField(i,j);
                 if (fields[i][j].owner == owner) {
                     fields[i][j].color = color;
 

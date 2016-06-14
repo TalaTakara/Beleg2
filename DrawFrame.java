@@ -47,6 +47,10 @@ public class DrawFrame extends JFrame {
         bu1.setBounds(450, 80, 100, 50);
         bu1.addActionListener(alNewGame);
 
+        add(bu2 = new JButton("UNDO"));
+        bu2.setBounds(450, 160, 100, 50);
+        bu2.addActionListener(alUNDO);
+
 
         labelSize = new JLabel("Felder");
         labelSize.setBounds(10, 0, 50, 50);
@@ -97,7 +101,7 @@ public class DrawFrame extends JFrame {
             int numPlayer = sliderPlayer.getValue();
             int size = sliderSize.getValue();
             if (size > 14) {
-                setSize(750, 750);
+                setSize(800, 800);
             }
             if (size > 19) {
                 fieldsize = 25;
@@ -105,7 +109,17 @@ public class DrawFrame extends JFrame {
             if (size > 24){
                 fieldsize = 20;
             }
+            turnsWin.setText(M.getNumTurns());
             M.initGame(size, numColors, numPlayer);
+            repaint();
+        }
+    };
+
+    ActionListener alUNDO = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            M.undo();
+            System.out.print("test");
             repaint();
         }
     };
@@ -125,10 +139,10 @@ public class DrawFrame extends JFrame {
                 g.drawRect(100 + i * fieldsize, 150 + j * fieldsize, fieldsize, fieldsize);
 
                 /* Debugger for Ownership */
-                if (f.owner != 0) {
-                    g.setFont(new Font("Sans", Font.BOLD, 20));
-                    g.drawString("" + f.owner, 110 + i * 30, 175 + j * 30);
-                }
+//                if (f.owner != 0) {
+//                    g.setFont(new Font("Sans", Font.BOLD, 20));
+//                    g.drawString("" + f.owner, 110 + i * fieldsize, 175 + j * fieldsize);
+//                }
             }
         }
     }
@@ -163,3 +177,4 @@ public class DrawFrame extends JFrame {
 
 
 // // TODO: 06.06.16 Frame adden
+// TODO highscore mit Fenster das aufpoppt und Namen abfragt und dann abspeichert in nen Label  oder undo-Funktion
