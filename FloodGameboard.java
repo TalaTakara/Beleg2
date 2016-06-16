@@ -8,10 +8,14 @@ import java.awt.*;
 public class FloodGameboard {
 
     public int size, numColor, width, height;
-    Field[][] fields,fieldsOld;
+    Field[][] fields;
+    Field[][] fieldsOld;
     Gamemaster M;
 
-
+    /**
+     * @param size     Größe des quardratischen Spielfeldes
+     * @param numColor Anzahl der Farben ( max 6)
+     */
     public FloodGameboard(int size, int numColor) {
 
         this.size = size;
@@ -20,30 +24,37 @@ public class FloodGameboard {
         height = 50;
     }
 
-
+    /**
+     * @param i x-Kordinate
+     * @param j y-Koordinate
+     * @return gibt ein Feld der Spielfeldes wieder
+     */
     public Field getField(int i, int j) {
         return fields[i][j];
     }
+
     public Field getFieldOld(int i, int j) {
         return fieldsOld[i][j];
     }
 
 
-    public void undo(){
+    public void undo() {
+
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                fields[i][j] = getFieldOld(i,j);
+                fields[i][j] = new Field(fieldsOld[i][j]);
             }
         }
 
 
     }
 
-    public void zug(int i, int j, int owner) {
-        Field f = fields[i][j];
-        checkPlanes(f.color, owner);
-    }
-
+    /**
+     * Erstellt ein neues Spielbrett mit random Farben
+     *
+     * @param size     Größe des Spielfeldes
+     * @param numColor Anzahl der Farben
+     */
 
     public void drawNewGame(int size, int numColor) {
 
@@ -57,27 +68,41 @@ public class FloodGameboard {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 fields[i][j] = new Field(numColor);
-                fieldsOld[i][j] = fields[i][j];
+                fieldsOld[i][j] = new Field(fields[i][j]);
             }
         }
 
         //Verhindere, dass beide startpositionen dieselbe farbe haben
-        while (fields[0][0].color == fields[size - 1][size - 1].color) {
+        while (fields[0][0].getColor() == fields[size - 1][size - 1].getColor()) {
             fields[0][0] = new Field(numColor);
         }
 
     }
 
+    /**
+     * Sucht die gewählte Farbe und gibt sie dann zu chechPlanes
+     *
+     * @param owner Besitzer eines Feldes
+     */
+    public void zug(int i, int j, int owner) {
+        Field f = fields[i][j];
+        checkPlanes(f.getColor(), owner);
+    }
 
+    /**
+     * Fäe
+     *
+     * @param color
+     * @param owner
+     */
     protected void checkPlanes(Color color, int owner) {
 
 
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                fieldsOld[i][j] = getField(i,j);
-                if (fields[i][j].owner == owner) {
-                    fields[i][j].color = color;
-
+                fieldsOld[i][j] = new Field(fields[i][j]);
+                if (fields[i][j].getOwner() == owner) {
+                    fields[i][j].setColor(color);
                 }
             }
         }
@@ -87,14 +112,14 @@ public class FloodGameboard {
             found = false;
             for (int i = 0; i < size; i++) {
                 for (int j = 0; j < size; j++) {
-                    if (fields[i][j].owner == owner) {
+                    if (fields[i][j].getOwner() == owner) {
 
                         {
                             if (i > 0) {
                                 Field f = fields[i - 1][j];
 
-                                if (f.owner != owner && f.color == color) {
-                                    f.owner = owner;
+                                if (f.getOwner() != owner && f.getColor() == color) {
+                                    f.setOwner(owner);
                                     found = true;
                                 }
                             }
@@ -104,8 +129,8 @@ public class FloodGameboard {
                             if (j > 0) {
                                 Field f = fields[i][j - 1];
 
-                                if (f.owner != owner && f.color == color) {
-                                    f.owner = owner;
+                                if (f.getOwner() != owner && f.getColor() == color) {
+                                    f.setOwner(owner);
                                     found = true;
                                 }
                             }
@@ -115,8 +140,8 @@ public class FloodGameboard {
                             if (i < size - 1) {
                                 Field f = fields[i + 1][j];
 
-                                if (f.owner != owner && f.color == color) {
-                                    f.owner = owner;
+                                if (f.getOwner() != owner && f.getColor() == color) {
+                                    f.setOwner(owner);
                                     found = true;
                                 }
                             }
@@ -125,8 +150,8 @@ public class FloodGameboard {
                             if (j < size - 1) {
                                 Field f = fields[i][j + 1];
 
-                                if (j < size - 1 && f.owner != owner && f.color == color) {
-                                    f.owner = owner;
+                                if (j < size - 1 && f.getOwner() != owner && f.getColor() == color) {
+                                    f.setOwner(owner);
                                     found = true;
                                 }
                             }
@@ -149,7 +174,7 @@ public class FloodGameboard {
 
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                if (getField(i, j).owner == player) {
+                if (getField(i, j).getOwner() == player) {
                     score++;
                 }
             }

@@ -106,7 +106,7 @@ public class DrawFrame extends JFrame {
             if (size > 19) {
                 fieldsize = 25;
             }
-            if (size > 24){
+            if (size > 24) {
                 fieldsize = 20;
             }
             turnsWin.setText(M.getNumTurns());
@@ -119,7 +119,6 @@ public class DrawFrame extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             M.undo();
-            System.out.print("test");
             repaint();
         }
     };
@@ -131,7 +130,7 @@ public class DrawFrame extends JFrame {
         for (int i = 0; i < M.getSize(); i++) {
             for (int j = 0; j < M.getSize(); j++) {
                 Field f = M.getField(i, j);
-                Color c = f.color;
+                Color c = f.getColor();
 
                 g.setColor(c);
                 g.fillRect(100 + i * fieldsize, 150 + j * fieldsize, fieldsize, fieldsize);

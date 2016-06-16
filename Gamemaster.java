@@ -3,8 +3,9 @@ package Gameboard;
 import java.awt.*;
 
 /**
- * Created by saskia on 06.06.16.boolean finish = false;
+ * Created by saskia on 06.06.16.;
  */
+
 public class Gamemaster {
 
     int player = 1;
@@ -12,24 +13,29 @@ public class Gamemaster {
     int size = 10;
     int numTurns = 0;
     int numPlayers = 1;
-    int claimedP1, claimedP2,highscore;
+    int claimedP1, claimedP2, highscore;
+    boolean end;
     String win = null;
     Color[] playerColor = new Color[numPlayers];
 
-    FloodGameboard F,FOld;
+    FloodGameboard F, FOld;
 
     Player P1, P2;
     Player[] Players;
 
-
+    /**
+     * @param F Spielbrett  bzw Gameboard
+     */
     public Gamemaster(FloodGameboard F) {
         this.F = F;
         player = 1;
         newGame();
-
+        end = false;
     }
 
-
+    /**
+     *
+     */
     public void newGame() {
 
         FOld = new FloodGameboard(size, numColors);
@@ -46,63 +52,73 @@ public class Gamemaster {
         for (int i = 0; i < numPlayers; i++) {
                 /* takes field with startposition from player*/
             Field f = F.getField(Players[i].getStartPosition(), Players[i].getStartPosition());
-            Players[i].color = f.color ;
+            Players[i].setColor(f.getColor());
                 /* makes fieldowner*/
-            f.owner = Players[i].number;
+            f.setOwner(Players[i].getNumber());
 
                 /*  test if more fields around*/
-            F.zug(Players[i].getStartPosition(), Players[i].getStartPosition(), Players[i].number);
+            F.zug(Players[i].getStartPosition(), Players[i].getStartPosition(), Players[i].getNumber());
         }
     }
 
     public void turn(int i, int j) {
 
-        System.out.print(player);
-        Color targetColor = F.getField(i, j).color;
+        if (!end) {
+            Color targetColor = F.getField(i, j).getColor();
 
 
-        /* You must not choose your color or from your opponent*/
-        if (targetColor != F.getField(0, 0).color) {
+            /* You must not choose your color or from your opponent*/
+            if (targetColor != F.getField(0, 0).getColor()) {
 
-
-            if (player == 1) {
-                if (Players.length > 1) {
-                    if (targetColor != Players[1].color) {
-                        F.zug(i, j, Players[0].number);
-                        player = 2;
-                        numTurns++;
-                        claimedP1 = F.getScore(Players[0].number);
-                        if (claimedP1 > (size * size) / 2) {
-                            win = "Spieler 1 hat gewonnen";
+                /** Einzelspieler */
+                if (player == 1) {
+                    if (Players.length > 1) {
+                        if (targetColor != Players[1].getColor()) {
+                            F.zug(i, j, Players[0].getNumber());
+                            player = 2;
+                            numTurns++;
+                            claimedP1 = F.getScore(Players[0].getNumber());
+                            if (claimedP1 > (size * size) / 2) {
+                                win = "Spieler 1 hat gewonnen";
+                                end = true;
+                            }
 
                         }
-
+                        /** Erster Spieler bei 2 Spielern*/
+                    } else if (Players.length == 1) {
+                        F.zug(i, j, Players[0].getNumber());
+                        Players[0].setColor(targetColor);
+                        numTurns++;
+                        claimedP1 = F.getScore(Players[0].getNumber());
+                        if (claimedP1 == (size * size)) {
+                            win = "Spieler 1 hat gewonnen";
+                            end = true;
+                        }
                     }
-                } else if (Players.length == 1 ){
-                    F.zug(i, j, Players[0].number);
-                    Players[0].color = targetColor;
+
+                    /** Zweiter Spieler bei 2 Spielern*/
+                } else if (player == 2 && targetColor != Players[1].getColor()) {
+                    F.zug(i, j, Players[1].getNumber());
+                    Players[1].setColor(targetColor);
                     numTurns++;
-                    claimedP1 = F.getScore(Players[0].number);
-                    if (claimedP1 == (size * size)) {
-                        win = "Spieler 1 hat gewonnen";
-
-                }
-                }
-
-            } else if (player == 2 && targetColor != Players[1].color) {
-                F.zug(i, j, Players[1].number);
-                Players[1].color = targetColor;
-                numTurns++;
-                player = 1;
-                claimedP2 = F.getScore(Players[1].number);
-                if (claimedP2 > (size * size) / 2) {
-                    win = "Spieler 2 hat gewonnen";
-
+                    player = 1;
+                    claimedP2 = F.getScore(Players[1].getNumber());
+                    if (claimedP2 > (size * size) / 2) {
+                        win = "Spieler 2 hat gewonnen";
+                        end = true;
+                    }
                 }
             }
         }
     }
 
+    /**
+     * initiert neues Spiel
+     *
+     * @param size       Größe des Spielfeldes
+     * @param numColors  Anzahl der Farben
+     * @param numPlayers Anzahl der Spieler
+     */
     public void initGame(int size, int numColors, int numPlayers) {
         this.size = size;
         this.numColors = numColors;
@@ -116,38 +132,39 @@ public class Gamemaster {
         newGame();
     }
 
-    public void undo(){
+    public void undo() {
         F.undo();
     }
 
+    /**
+     * gibt ein Feld zurück
+     *
+     * @param i x-Koordinate
+     * @param j y-Koordiante
+     * @return ein Feld
+     */
     public Field getField(int i, int j) {
         return F.getField(i, j);
     }
 
-    public void setSize(int i) {
-        this.size = i;
-    }
-
+    /**
+     * @return Gibt die aktuelle Größe des quadratischen Spielfeldes wieder
+     */
     public int getSize() {
         return size;
     }
 
+    /**
+     * @return Anzahl der Felder von Spieler 1
+     */
     public String getClaimedP1() {
         String claim = "Spieler 1 : " + Integer.toString(claimedP1);
         return claim;
     }
 
-    public String getNumTurns() {
-        String wins;
-        if (win != null) {
-            wins = win + " in " + numTurns + " Züge.";
-        }
-        else{
-        String turns = "Züge : " + Integer.toString(numTurns);
-        return turns;}
-        return wins;
-    }
-
+    /**
+     * @return Anzahl der Ferlder von Spieler 2
+     */
     public String getClaimedP2() {
         String claim = "";
         if (numPlayers > 1) {
@@ -156,7 +173,21 @@ public class Gamemaster {
         return claim;
     }
 
-    public String getHighscore(){
+    /**
+     * @return String mit Anzahl der gespielten Züge bzw Gewinnbenachrichtugung mit Anzahl der Züge zum Sieg
+     */
+    public String getNumTurns() {
+        String wins;
+        if (win != null) {
+            wins = win + " in " + numTurns + " Züge.";
+        } else {
+            String turns = "Züge : " + Integer.toString(numTurns);
+            return turns;
+        }
+        return wins;
+    }
+
+    public String getHighscore() {
         String highscoreString = "";
         return highscoreString;
     }
